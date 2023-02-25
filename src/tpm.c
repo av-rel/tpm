@@ -51,6 +51,23 @@ uint* tpm_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, int c
     return pixels;
 }
 
+/* uint* tpm_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, int cx, int cy, uint radius, uint color) */
+/* { */
+/*     uint i, j; */
+/*     for (i = 0; i < canvas_width; i++) { */
+/*         for (j = 0; j < canvas_height; j++) { */
+/*             int dx = i - cx; */
+/*             int dy = j - cy; */
+/*             //Able to root without stdlib for empty circle drawing */
+/*             int distance_root = sqrt(SQR(dx) + SQR(dy)); */
+/*             if (distance_root == radius) { */
+/*                 pixels[j * canvas_width + i] = color; */
+/*             } */
+/*         } */
+/*     } */
+/*     return pixels; */
+/* } */
+
 uint* tpm_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, int y, uint width, uint height, uint color)
 {
     uint i, j;
@@ -58,6 +75,24 @@ uint* tpm_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, 
         for (j = y; j < (y + height); j++) {
             pixels[j * canvas_width + i] = color;
         }
+    }
+    return pixels;
+}
+
+uint* tpm_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, int y, uint width, uint height, uint color) 
+{
+    uint i, j;
+    
+    // Draw the top and bottom edges of the rectangle
+    for (i = x; i < x + width; i++) {
+        pixels[y * canvas_width + i] = color;
+        pixels[(y + height - 1) * canvas_width + i] = color;
+    }
+
+    // Draw the left and right edges of the rectangle
+    for (j = y; j < y + height; j++) {
+        pixels[j * canvas_width + x] = color;
+        pixels[j * canvas_width + (x + width - 1)] = color;
     }
     return pixels;
 }
