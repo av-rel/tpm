@@ -4,8 +4,8 @@
 #include <string.h>
 #include <errno.h>
 
-#include "./tpm.h"
-#include "./tpm.c"
+#include "tpm.c"
+#include "tpm.h"
 
 #define W 100
 #define H 200
@@ -18,7 +18,7 @@ int main(int argc, char** argv){
 
     FILE* fp;
     if ((fp = fopen(file, "wb")) == NULL) {
-        fprintf(stderr, "%s [ERROR]: Couldn't write to %s\n", APP_NAME, file);
+        fprintf(stderr, "%s [ERROR]: %s\n", APP_NAME, strerror(errno));
         rtn = 1;
         goto dispose;
     }
@@ -31,11 +31,10 @@ int main(int argc, char** argv){
     }
 
     fprintf(fp, "P3\n%d %d\n255\n", W, H);
-    fwrite(image.data, sizeof(PIXEL), W * H, fp);
+    fwrite(image.data, sizeof(Pixel), W * H, fp);
 
 dispose:
     fclose(fp);
-    tpm_dispose(&image);
 
     return 0;
 }
