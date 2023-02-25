@@ -14,15 +14,13 @@
 uint pixels[WIDTH * HEIGHT];
 
 int main(int argc, char** argv) {
-    int rtn = 0;
-    char* file = "res.png";
+    char* file = "examples/white.png";
 
     Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
-    tpm_fill(&canvas, 0xFFFFFFFF);
+    tpm_fill(&canvas, 0xFFFFFFFF); //AABBGGRR
 
-    rtn = tpm_save_png(canvas, file);
+    save_to_png(canvas, file);
 
-dispose:
-    return rtn;
+    return 0;
 }
 
