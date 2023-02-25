@@ -14,10 +14,14 @@
 uint pixels[WIDTH * HEIGHT];
 
 int main(int argc, char** argv) {
-    char* file = "examples/white.png";
+    char* file = "examples/line.png";
 
+    //init canvas
     Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
-    tpm_fill(&canvas, 0xFFFFFFFF); //AABBGGRR
+    //fill canvas with white color
+    tpm_fill_canvas(&canvas, 0xFFFFFFFF); //AABBGGRR
+    //draw line
+    tpm_draw_line(&canvas, 0, 0, canvas.height, canvas.height, 0xFF000000);
 
     save_to_png(canvas, file);
 
