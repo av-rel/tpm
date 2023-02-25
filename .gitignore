@@ -56,5 +56,6 @@ Mkfile.old
 dkms.conf
 
 bin/
+local/
 
 # End of https://www.toptal.com/developers/gitignore/api/c
