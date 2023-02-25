@@ -16,11 +16,14 @@ Canvas tpm_canvas(uint *pixels, uint width, uint height)
 void tpm_fill(Canvas *canvas, uint color)
 {
     uint x, y;
-    for (y = 0; y < canvas->height; y++){
-        for (x = 0; x < canvas->height; ++x){
+    for (y = 0; y < canvas->height; y++)
+        for (x = 0; x < canvas->width; ++x)
             canvas->pixels[(y) * canvas->width + (x)] = color;
-        }
-    }
+}
+
+void tpm_draw_line(Canvas *canvas, uint x1, uint y1, uint x2, uint y2 , uint color)
+{
+
 }
 
 #endif
