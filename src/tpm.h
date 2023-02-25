@@ -2,25 +2,18 @@
 #define TPM_H
 
 //AABBGGRR format for pixel rgba value
-// 0xFF000000 is blackt
 
 typedef unsigned int uint;
-
-typedef struct {
-	uint r,g,b;
-} RGB;
-
-typedef struct {
-	int x, y;
-} Vec2;
 
 typedef struct {
 	uint *pixels, width, height;
 } Canvas;
 
+
 Canvas tpm_canvas(uint *pixels, uint width, uint height);
-void tpm_fill_canvas(Canvas *canvas, uint color);
-void tpm_draw_line(Canvas *canvas, uint x1, uint y1, uint x2, uint y2 , uint color);
-void tpm_draw_circle(Canvas *canvas, uint center_x, uint center_y, uint radius, uint color);
+uint* tpm_fill(uint *pixels, uint width, uint height, uint color);
+uint* tpm_draw_line(uint *pixels, uint canvas_width, uint height, uint x1, uint y1, uint x2, uint y2 , uint color);
+uint* tpm_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, int cx, int cy, uint radius, uint color);
+
 
 #endif
