@@ -2,7 +2,7 @@
 #define TPM_H
 
 //AABBGGRR format for pixel rgba value
-// 0xFF000000 is black
+// 0xFF000000 is blackt
 
 typedef unsigned int uint;
 
@@ -19,6 +19,7 @@ typedef struct {
 } Canvas;
 
 Canvas tpm_canvas(uint *pixels, uint width, uint height);
-void tpm_fill(Canvas *canvas, uint color);
+void tpm_fill_canvas(Canvas *canvas, uint color);
+void tpm_draw_line(Canvas *canvas, uint x1, uint y1, uint x2, uint y2 , uint color);
 
 #endif
