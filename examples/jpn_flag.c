@@ -8,11 +8,12 @@ uint pixels[WIDTH * HEIGHT];
 
 int main(int argc, char** argv) {
     char* file = "./jpn_flag.png";
-
+    
     Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
-    tpm_fill_canvas(&canvas, 0xFFFFFFFF);
-    tpm_draw_circle(&canvas, canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) * 1/10, 0xFF000088);
+    canvas.pixels = tpm_fill(canvas.pixels, canvas.width, canvas.height, 0xFFFFFFFF);
+    canvas.pixels = tpm_fill_circle(canvas.pixels, canvas.width, canvas.height, canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) * 1/10, 0xFF000088);
 
-    save_to_png(canvas, file);
+    fs_save_to_png(canvas, file);
+
     return 0;
 }
