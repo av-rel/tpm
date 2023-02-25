@@ -21,5 +21,6 @@ typedef struct {
 Canvas tpm_canvas(uint *pixels, uint width, uint height);
 void tpm_fill_canvas(Canvas *canvas, uint color);
 void tpm_draw_line(Canvas *canvas, uint x1, uint y1, uint x2, uint y2 , uint color);
+void tpm_draw_circle(Canvas *canvas, uint center_x, uint center_y, uint radius, uint color);
 
 #endif
