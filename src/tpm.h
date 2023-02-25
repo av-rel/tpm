@@ -1,21 +1,20 @@
 #ifndef TPM_H
 #define TPM_H
 
-#define APP_NAME "TPM"
+#define PPM_FORMAT "P3"
+
+typedef unsigned int uint;
 
 typedef struct {
-	int r, g, b;
+	uint r,g,b;
 } RGB;
 
-typedef RGB Pixel;
+typedef struct {
+	int x, y;
+} Vec2;
 
 typedef struct {
-	int width, height;
-	Pixel data[];
-} Image;
-
-
-Image tpm_init_image(int width, int height);
-void tpm_set_pixel(Image *img, int x, int y, int r, int g, int b);
+	uint *pixels, width, height;
+} Canvas;
 
 #endif

@@ -1,23 +1,26 @@
-#ifndef TPM
-#define TPM
+#ifndef TPM_C
+#define TPM_C
 
-#include <stdlib.h>
+#include "tpm.h"
 
-#include "./tpm.h"
-
-Image tpm_init_image(int width, int height)
+Canvas tpm_canvas(uint *pixels, uint width, uint height) 
 {
-    Image image; 
-    Pixel data[width*height];
-    return image;
+    Canvas canvas = {
+        .pixels = pixels,
+        .width  = width,
+        .height = height
+    };
+    return canvas;
 }
 
-void tpm_set_pixel(Image* img, int x, int y, int r, int g, int b) 
+void tpm_fill(Canvas *canvas, uint color)
 {
-    int index = y * img->width + x;
-    img->data[index].r = r;
-    img->data[index].g = g;
-    img->data[index].b = b;
+    uint x, y;
+    for (y = 0; y < canvas->height; y++){
+        for (x = 0; x < canvas->height; ++x){
+            canvas->pixels[(y) * canvas->width + (x)] = color;
+        }
+    }
 }
 
 #endif
