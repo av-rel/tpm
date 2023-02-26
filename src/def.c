@@ -1,6 +1,8 @@
 #ifndef _DEF_C_
 #define _DEF_C_
 
+#define TPM_PI 3.14159265359
+
 #define TPM_ABS(n) (n < 0 ? -(n) : n)
 #define TPM_SQR(n) (n*n)
 #define TPM_MAX(a, b) ( a > b ? a : b)
