@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     canvas.pixels = tpm_fill(canvas.pixels, canvas.width, canvas.height, 0xFFFFFFFF);
     canvas.pixels = tpm_fill_circle(canvas.pixels, canvas.width, canvas.height, canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) * 1/10, 0xFF000088);
 
-    fs_save_to_png(canvas, file);
+    fs_save_as_png(canvas, file);
 
     return 0;
 }

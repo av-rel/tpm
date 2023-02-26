@@ -13,5 +13,5 @@ int main(int argc, char** argv) {
     TPM_Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
     tpm_fill(canvas.pixels, canvas.width, canvas.height, 0xFFFFFFFF);
         
-    return fs_save_to_png(canvas, file);
+    return fs_save_as_png(canvas, file);
 }

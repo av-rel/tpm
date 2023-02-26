@@ -22,5 +22,5 @@ int main(int argc, char** argv) {
     uint hor_x = 0, hor_y = canvas.height / 2 - hor_h / 2 ;
     tpm_fill_rect(canvas.pixels, canvas.width, canvas.height, hor_x, hor_y, hor_w, hor_h, 0xFF0000FF);
         
-    return fs_save_to_png(canvas, file);
+    return fs_save_as_png(canvas, file);
 }
