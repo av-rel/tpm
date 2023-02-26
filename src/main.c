@@ -3,18 +3,21 @@
 #include "tpm.h"
 #include <stdio.h>
 
-#define WIDTH 960
-#define HEIGHT 534
+#define WIDTH 256
+#define HEIGHT 256
 
 uint pixels[WIDTH * HEIGHT];
 
 int main(int argc, char** argv) {
     char* file = "bin/test.png";
 
-    TPM_Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
-    tpm_fill(canvas.pixels, WIDTH, HEIGHT, 0xFFFFFFFF);
+    TPM_Canvas canvas = TPM_init_canvas(pixels, WIDTH, HEIGHT);
+    TPM_fill(canvas.pixels, WIDTH, HEIGHT, 0xFFFFFFFF);
 
-    tpm_fill_triangle(canvas.pixels, WIDTH, HEIGHT, 0, 0, 100, 100, 500, 500, 0xFF000000);
+    int c;
+    for (c = 0; c <= 100; c++) {
+        TPM_fill_point(canvas.pixels, canvas.width, canvas.height, 100, c, 0xFF0000FF);
+    }
 
     fs_save_as_png(canvas, file);
 
