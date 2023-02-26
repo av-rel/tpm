@@ -1,4 +1,4 @@
-#include "../src/TPM.c"
+#include "../src/tpm.c"
 #include "../deps/fs.c"
 
 #define WIDTH 900
