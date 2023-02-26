@@ -4,12 +4,12 @@
 #include "tpm.h"
 #include "def.c"
 
-TPM_Canvas TPM_init_canvas(uint *pixels, uint width, uint height) 
+TPM_Canvas TPM_init_canvas(uint *pixels, uint canvas_width, uint canvas_height) 
 {
     TPM_Canvas canvas = {
         .pixels = pixels,
-        .width  = width,
-        .height = height
+        .width  = canvas_width,
+        .height = canvas_height
     };
 
     return canvas;
@@ -27,13 +27,19 @@ uint* TPM_fill(uint *pixels, uint width, uint height, uint color)
     return pixels;
 }
 
-uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, uint x1, uint y1, uint x2, uint y2 , uint color)
+uint* TPM_fill_point(uint* pixels, uint canvas_width, uint canvas_height, int x, int y, uint color)
+{
+    pixels[y * canvas_width + x] = color;
+
+    return pixels;
+}
+
+uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, int x1, int y1, int x2, int y2 , uint color)
 {
     uint x, y;
     for (x = x1; x <= x2; x++) {
-        uint index = y * canvas_width + x;
         y = (int)((float)(y2 - y1) / (float)(x2 - x1) * (float)(x - x1) + (float)y1);
-        pixels[index] = color;
+        pixels[y * canvas_width + x] = color;
     }
 
     return pixels;
