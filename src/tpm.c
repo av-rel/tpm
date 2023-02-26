@@ -27,9 +27,9 @@ uint* TPM_fill(uint *pixels, uint width, uint height, uint color)
     return pixels;
 }
 
-uint* TPM_fill_point(uint* pixels, uint canvas_width, uint canvas_height, int x, int y, uint color)
+uint* TPM_fill_point(uint* pixels, uint stride, int x, int y, uint color)
 {
-    pixels[y * canvas_width + x] = color;
+    pixels[y * stride + x] = color;
 
     return pixels;
 }
