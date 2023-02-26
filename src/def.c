@@ -1,13 +1,13 @@
 #ifndef _DEF_C_
 #define _DEF_C_
 
-#define ABS(n) (n < 0 ? -(n) : n)
-#define SQR(n) (n*n)
-#define MAX(a, b) ( a > b ? a : b)
-#define MIN(a, b) ( a < b ? a : b)
-#define SWAP_INT(a, b) { a += b; b = a - b; a -= b; }
+#define TPM_ABS(n) (n < 0 ? -(n) : n)
+#define TPM_SQR(n) (n*n)
+#define TPM_MAX(a, b) ( a > b ? a : b)
+#define TPM_MIN(a, b) ( a < b ? a : b)
+#define TPM_SWAP_INT(a, b) { a += b; b = a - b; a -= b; }
 
-double SQRT(double x) {
+double TPM_SQRT(double x) {
     double guess = x / 2.0;
     double prev_guess;
     double error = 0.000001;
