@@ -9,7 +9,7 @@ uint pixels[WIDTH * HEIGHT];
 int main(int argc, char** argv) {
     char* file = "./eng_flag.png";
 
-    Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
+    TPM_Canvas canvas = tpm_canvas(pixels, WIDTH, HEIGHT);
     tpm_fill(canvas.pixels, canvas.width, canvas.height, 0xFFFFFFFF);
 
     //vertical rect

@@ -4,9 +4,9 @@
 #include "tpm.h"
 #include "def.h"
 
-Canvas tpm_canvas(uint *pixels, uint width, uint height) 
+TPM_Canvas tpm_canvas(uint *pixels, uint width, uint height) 
 {
-    Canvas canvas = {
+    TPM_Canvas canvas = {
         .pixels = pixels,
         .width  = width,
         .height = height

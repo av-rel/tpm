@@ -11,7 +11,7 @@
 #include "./stb_image_write.h"
 
 
-int fs_save_to_png(Canvas canvas, char* path)
+int fs_save_to_png(TPM_Canvas canvas, char* path)
 {
     int rtn = 0;
     if (!stbi_write_png(path, canvas.width, canvas.height, 4, canvas.pixels, sizeof(uint) * canvas.width)) {
@@ -21,7 +21,7 @@ int fs_save_to_png(Canvas canvas, char* path)
     return rtn;
 }
 
-int fs_save_to_jpg(Canvas canvas, char* path)
+int fs_save_to_jpg(TPM_Canvas canvas, char* path)
 {
     int rtn = 0;
     if (!stbi_write_jpg(path, canvas.width, canvas.height, 4, canvas.pixels, sizeof(uint) * canvas.width)) {
