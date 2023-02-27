@@ -22,4 +22,10 @@ double TPM_SQRT(double x) {
     return guess;
 }
 
+#define TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3) { \
+    if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); } \
+    if (y2 > y3) { TPM_SWAP(int, x2, x3); TPM_SWAP(int, y2, y3); } \
+    if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); } \
+}
+
 #endif
