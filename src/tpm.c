@@ -6,21 +6,21 @@
 typedef unsigned int uint;
 
 typedef struct {
-	uint *pixels, width, height;
+    uint *pixels, width, height;
 } TPM_Canvas;
 
 TPM_Canvas TPM_init_canvas(uint *pixels, uint canvas_width, uint canvas_height);
 
 uint* TPM_fill(uint *pixels, uint width, uint height, uint color);
-uint* TPM_fill_point(uint* pixels, uint stride, int x, int y, uint color);
-uint* TPM_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, int cx, int cy, uint radius, uint color);
-uint* TPM_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, int y, uint width, uint height, uint color);
-uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, int x1, int y1, int x2, int y2, int x3, int y3, uint color);
+uint* TPM_fill_point(uint* pixels, uint stride, uint x, uint y, uint color);
+uint* TPM_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, uint cx, uint cy, uint radius, uint color);
+uint* TPM_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, uint x, uint y, uint width, uint height, uint color);
+uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, uint x1, uint y1, uint x2, uint y2, uint x3, uint y3, uint color);
 
-uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, int x1, int y1, int x2, int y2 , uint color);
-uint* TPM_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, int cx, int cy, uint radius, uint color);
-uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, int y, uint width, uint height, uint color);
-uint* TPM_draw_triangle(uint* pixels, uint canvas_width, uint canvas_height, int x1, int y1, int x2, int y2, int x3, int y3, uint color);
+uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, uint x1, uint y1, uint x2, uint y2 , uint color);
+uint* TPM_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, uint cx, uint cy, uint radius, uint color);
+uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, uint x, uint y, uint width, uint height, uint color);
+uint* TPM_draw_triangle(uint* pixels, uint canvas_width, uint canvas_height, uint x1, uint y1, uint x2, uint y2, uint x3, uint y3, uint color);
 
 TPM_Canvas TPM_init_canvas(uint *pixels, uint canvas_width, uint canvas_height) 
 {
@@ -45,14 +45,14 @@ uint* TPM_fill(uint *pixels, uint width, uint height, uint color)
     return pixels;
 }
 
-uint* TPM_fill_point(uint* pixels, uint stride, int x, int y, uint color)
+uint* TPM_fill_point(uint* pixels, uint stride, uint x, uint y, uint color)
 {
     pixels[y * stride + x] = color;
 
     return pixels;
 }
 
-uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, int x1, int y1, int x2, int y2 , uint color)
+uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, uint x1, uint y1, uint x2, uint y2 , uint color)
 {
     uint x, y;
     for (x = x1; x <= x2; x++) {
@@ -63,7 +63,7 @@ uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, int x1, int y1
     return pixels;
 }
 
-uint* TPM_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, int cx, int cy, uint radius, uint color)
+uint* TPM_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, uint cx, uint cy, uint radius, uint color)
 {
     uint x, y;
     for (y = 0; y < canvas_height; y++)
@@ -78,7 +78,7 @@ uint* TPM_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, int c
     return pixels;
 }
 
-uint* TPM_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, int cx, int cy, uint radius, uint color)
+uint* TPM_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, uint cx, uint cy, uint radius, uint color)
 {
     uint x, y;
     int r2 = TPM_SQR(radius);
@@ -96,7 +96,7 @@ uint* TPM_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, int c
     return pixels;
 }
 
-uint* TPM_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, int y, uint width, uint height, uint color)
+uint* TPM_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, uint x, uint y, uint width, uint height, uint color)
 {
     uint i, j;
     for (i = x; i < (x + width); i++) {
@@ -108,7 +108,7 @@ uint* TPM_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, 
     return pixels;
 }
 
-uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, int y, uint width, uint height, uint color) 
+uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, uint x, uint y, uint width, uint height, uint color) 
 {
     uint i, j;
 
@@ -126,20 +126,9 @@ uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, 
 }
 
 //TODO: only fill triangle if inside canvas | donot fill if got out of canvas
-uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, int x1, int y1, int x2, int y2, int x3, int y3, uint color)
+uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, uint x1, uint y1, uint x2, uint y2, uint x3, uint y3, uint color)
 {
-    if (y1 > y2) {
-        TPM_SWAP(int, x1, x2);
-        TPM_SWAP(int, y1, y2);
-    }
-    if (y2 > y3) {
-        TPM_SWAP(int, x2, x3);
-        TPM_SWAP(int, y2, y3);
-    }
-    if (y1 > y2) {
-        TPM_SWAP(int, x1, x2);
-        TPM_SWAP(int, y1, y2);
-    }
+    TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3);
     
     float m1 = (float)(x2 - x1) / (y2 - y1);
     float m2 = (float)(x3 - x1) / (y3 - y1);
@@ -167,21 +156,10 @@ uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, int
 }
 
 //TODO: implement draw triangle unfilled
-uint* TPM_draw_triangle(uint* pixels, uint canvas_width, uint canvas_height, int x1, int y1, int x2, int y2, int x3, int y3, uint color) 
+uint* TPM_draw_triangle(uint* pixels, uint canvas_width, uint canvas_height, uint x1, uint y1, uint x2, uint y2, uint x3, uint y3, uint color) 
 {
     return 0;
-    if (y1 > y2) {
-        TPM_SWAP(int, x1, x2);
-        TPM_SWAP(int, y1, y2);
-    }
-    if (y2 > y3) {
-        TPM_SWAP(int, x2, x3);
-        TPM_SWAP(int, y2, y3);
-    }
-    if (y1 > y2) {
-        TPM_SWAP(int, x1, x2);
-        TPM_SWAP(int, y1, y2);
-    }
+    TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3);
     
     float m1 = (float)(x2 - x1) / (y2 - y1);
     float m2 = (float)(x3 - x1) / (y3 - y1);
