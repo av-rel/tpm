@@ -129,16 +129,16 @@ uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, int x, 
 uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, int x1, int y1, int x2, int y2, int x3, int y3, uint color)
 {
     if (y1 > y2) {
-        TPM_SWAP_INT(x1, x2);
-        TPM_SWAP_INT(y1, y2);
+        TPM_SWAP(int, x1, x2);
+        TPM_SWAP(int, y1, y2);
     }
     if (y2 > y3) {
-        TPM_SWAP_INT(x2, x3);
-        TPM_SWAP_INT(y2, y3);
+        TPM_SWAP(int, x2, x3);
+        TPM_SWAP(int, y2, y3);
     }
     if (y1 > y2) {
-        TPM_SWAP_INT(x1, x2);
-        TPM_SWAP_INT(y1, y2);
+        TPM_SWAP(int, x1, x2);
+        TPM_SWAP(int, y1, y2);
     }
     
     float m1 = (float)(x2 - x1) / (y2 - y1);
@@ -171,16 +171,16 @@ uint* TPM_draw_triangle(uint* pixels, uint canvas_width, uint canvas_height, int
 {
     return 0;
     if (y1 > y2) {
-        TPM_SWAP_INT(x1, x2);
-        TPM_SWAP_INT(y1, y2);
+        TPM_SWAP(int, x1, x2);
+        TPM_SWAP(int, y1, y2);
     }
     if (y2 > y3) {
-        TPM_SWAP_INT(x2, x3);
-        TPM_SWAP_INT(y2, y3);
+        TPM_SWAP(int, x2, x3);
+        TPM_SWAP(int, y2, y3);
     }
     if (y1 > y2) {
-        TPM_SWAP_INT(x1, x2);
-        TPM_SWAP_INT(y1, y2);
+        TPM_SWAP(int, x1, x2);
+        TPM_SWAP(int, y1, y2);
     }
     
     float m1 = (float)(x2 - x1) / (y2 - y1);
