@@ -1,5 +1,5 @@
 #include "../src/tpm.c"
-#include "../deps/fs.c"
+#include "../src/fs.c"
 
 #define WIDTH 960
 #define HEIGHT 540
@@ -22,5 +22,5 @@ int main(int argc, char** argv) {
     uint hor_x = 0, hor_y = canvas.height / 2 - hor_h / 2 ;
     TPM_fill_rect(canvas.pixels, canvas.width, canvas.height, hor_x, hor_y, hor_w, hor_h, 0xFF000088);
         
-    return fs_save_as_png(canvas, file);
+    return TPM_save_as_png(canvas.pixels, canvas.width, canvas.height, file);
 }
