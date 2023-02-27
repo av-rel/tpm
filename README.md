@@ -12,13 +12,13 @@ TPM is a pixel renderer to be formatted and saved to image format or also be use
 
 ## Example
 ```c
-#include "src/tpm.c"
-#include "deps/fs.c"	//for saving to file (dependency not part of lib)
+#include "tpm/src/tpm.c"
+#include "tpm/src/fs.c"
 
 #define WIDTH 900
 #define HEIGHT 600
 
-uint pixels[WIDTH * HEIGHT]; //pixels
+uint pixels[WIDTH * HEIGHT];
 
 int main(int argc, char** argv) {
     char* file = "./jpn_flag.png";
@@ -27,8 +27,7 @@ int main(int argc, char** argv) {
     canvas.pixels = TPM_fill(canvas.pixels, canvas.width, canvas.height, 0xFFFFFFFF);
     canvas.pixels = TPM_fill_circle(canvas.pixels, canvas.width, canvas.height, canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) * 1/10, 0xFF000088);
 
-    fs_save_as_png(canvas, file); //save to file
-    return 0;
+    return TPM_save_as_png(canvas, file);;
 }
 ```
 
@@ -38,8 +37,8 @@ int main(int argc, char** argv) {
 
 
 ```c
-#include "src/tpm.c"
-#include "deps/fs.c"	//for saving to file (dependency not part of lib)
+#include "tpm/src/tpm.c"
+#include "tpm/src/fs.c"
 
 #define WIDTH 960
 #define HEIGHT 540
@@ -62,7 +61,7 @@ int main(int argc, char** argv) {
     uint hor_x = 0, hor_y = canvas.height / 2 - hor_h / 2 ;
     TPM_fill_rect(canvas.pixels, canvas.width, canvas.height, hor_x, hor_y, hor_w, hor_h, 0xFF000088);
         
-    return fs_save_as_png(canvas, file);
+    return TPM_save_as_png(canvas, file);
 }
 ```
 
