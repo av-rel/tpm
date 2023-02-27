@@ -17,7 +17,7 @@ uint* TPM_fill_circle(uint *pixels, uint canvas_width, uint canvas_height, uint 
 uint* TPM_fill_rect(uint *pixels, uint canvas_width, uint canvas_height, uint x, uint y, uint width, uint height, uint color);
 uint* TPM_fill_triangle(uint* pixels, uint canvas_width, uint canvas_height, uint x1, uint y1, uint x2, uint y2, uint x3, uint y3, uint color);
 
-uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, uint x1, uint y1, uint x2, uint y2 , uint color);
+uint* TPM_draw_line(uint *pixels, uint stride, uint x1, uint y1, uint x2, uint y2 , uint color);
 uint* TPM_draw_circle(uint *pixels, uint canvas_width, uint canvas_height, uint cx, uint cy, uint radius, uint color);
 uint* TPM_draw_rect(uint *pixels, uint canvas_width, uint canvas_height, uint x, uint y, uint width, uint height, uint color);
 uint* TPM_draw_triangle(uint* pixels, uint canvas_width, uint canvas_height, uint x1, uint y1, uint x2, uint y2, uint x3, uint y3, uint color);
@@ -52,12 +52,13 @@ uint* TPM_fill_point(uint* pixels, uint stride, uint x, uint y, uint color)
     return pixels;
 }
 
-uint* TPM_draw_line(uint *pixels, uint canvas_width, uint height, uint x1, uint y1, uint x2, uint y2 , uint color)
+// TODO: not to draw canvas if line exceeds cords canvas
+uint* TPM_draw_line(uint *pixels, uint stride, uint x1, uint y1, uint x2, uint y2 , uint color)
 {
     uint x, y;
     for (x = x1; x <= x2; x++) {
         y = (int)((float)(y2 - y1) / (float)(x2 - x1) * (float)(x - x1) + (float)y1);
-        pixels[y * canvas_width + x] = color;
+        pixels[y * stride + x] = color;
     }
 
     return pixels;
