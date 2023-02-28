@@ -29,7 +29,8 @@ double TPM_M_POW(double x, int exp) {
 	double res = 1;
 
 	int i;
-	for (i = 0; i < exp; i++) res *= x;
+    if (exp < 0) return (1 / TPM_M_POW(x, TPM_M_ABS(exp)));
+    else for (i = 0; i < exp; i++) res *= x;
 
 	return res;
 }
