@@ -2,13 +2,18 @@
 
 ## Description
 
-TPM is a pixel renderer to be formatted and saved to image format or also be used for rendering images in Canvas like SDL or HTML Canvas (using Wasm)
+TPM is a pixel renderer to be formatted and saved to image format or also be used for rendering images in Canvas like SDL or HTML Canvas (using wasm)
 
 ## Perks
-- Pure c
-- No standard library
-- Can be used by any std version of c
-- Able to draw different geometrical shapes
+* Pure C
+* No use of any C lib
+* Able to draw different geometrical shapes
+* Can be saved as:
+    * JPG
+    * PNG
+    * BMP
+    
+---
 
 ## Example
 ```c
@@ -27,7 +32,7 @@ int main(int argc, char** argv) {
     canvas.pixels = TPM_fill(canvas.pixels, canvas.width, canvas.height, 0xFFFFFFFF);
     canvas.pixels = TPM_fill_circle(canvas.pixels, canvas.width, canvas.height, canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) * 1/10, 0xFF000088);
 
-    return TPM_save_as_png(canvas, file);;
+    return TPM_save_as_png(canvas.pixels, canvas.width, canvas.height, file);;
 }
 ```
 
@@ -61,7 +66,7 @@ int main(int argc, char** argv) {
     uint hor_x = 0, hor_y = canvas.height / 2 - hor_h / 2 ;
     TPM_fill_rect(canvas.pixels, canvas.width, canvas.height, hor_x, hor_y, hor_w, hor_h, 0xFF000088);
         
-    return TPM_save_as_png(canvas, file);
+    return TPM_save_as_png(canvas.pixels, canvas.width, canvas.height, file);
 }
 ```
 
