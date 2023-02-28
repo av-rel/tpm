@@ -25,6 +25,15 @@ double TPM_M_SQRT(double x) {
     return guess;
 }
 
+double TPM_M_POW(double x, int exp) {
+	double res = 1;
+
+	int i;
+	for (i = 0; i < exp; i++) res *= x;
+
+	return res;
+}
+
 #define TPM_sort_vertices(x1, y1, x2, y2) { \
     if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); } \
 }
