@@ -2,7 +2,9 @@
 
 ## Description
 
-TPM is a pixel renderer to be formatted and saved to image format or also be used for rendering images in Canvas like SDL or HTML Canvas (using wasm)
+TPM is a pixel editor and can save as image format or also be used for rendering images in Canvas like SDL or HTML Canvas (using wasm)
+
+## NOTE: Under Development
 
 ## Perks
 * Pure C
@@ -12,7 +14,7 @@ TPM is a pixel renderer to be formatted and saved to image format or also be use
     * JPG
     * PNG
     * BMP
-    
+
 ---
 
 ## Example
