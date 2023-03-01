@@ -2,6 +2,7 @@
 #define TPM_M_
 
 #define TPM_M_PI 3.14159265359
+
 #define TPM_M_abs(n) (n < 0 ? -(n) : n)
 #define TPM_M_sqr(n) (n*n)
 #define TPM_M_max(a, b) (a > b ? a : b)
@@ -13,10 +14,10 @@ long int TPM_M_factorial(int num) {
     return (num * TPM_M_factorial(num - 1));
 }
 
-double TPM_M_POW(double x, int exp) {
+double TPM_M_pow(double x, int exp) {
     double res = 1;
 
-    if (exp < 0) return (1 / TPM_M_POW(x, TPM_M_abs(exp)));
+    if (exp < 0) return (1 / TPM_M_pow(x, TPM_M_abs(exp)));
 
     int i;
     for (i = 0; i < exp; i++) res *= x;
@@ -90,6 +91,7 @@ double TPM_M_cos(double theta) {
     return ( TPM_M_sqrt(1 - ( TPM_M_sin(theta) * TPM_M_sin(theta)) ) );
 }
 
+/* tan = sinx/cosx */
 double TPM_M_tan(double theta) { return (TPM_M_sin(theta)/TPM_M_cos(theta)); }
 
 #endif
