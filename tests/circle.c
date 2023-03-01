@@ -1,4 +1,4 @@
-#include "../src/tpm.c"
+#include "../tpm.c"
 
 #include <stdio.h>
 

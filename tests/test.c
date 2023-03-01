@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "../src/tpm.c"
-#include "../src/fs.c"
 
 #include "./line.c"
 #include "./rect.c"
