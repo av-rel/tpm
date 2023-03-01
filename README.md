@@ -19,8 +19,8 @@ TPM is a pixel editor and can save as image format or also be used for rendering
 
 ## Example
 ```c
-#include "tpm/src/tpm.c"
-#include "tpm/src/fs.c"
+#include "tpm.c"
+#include "deps/fs.c"
 
 #define WIDTH 900
 #define HEIGHT 600
@@ -44,8 +44,8 @@ int main(int argc, char** argv) {
 
 
 ```c
-#include "tpm/src/tpm.c"
-#include "tpm/src/fs.c"
+#include "./tpm.c"
+#include "./deps/fs.c"
 
 #define WIDTH 960
 #define HEIGHT 540
