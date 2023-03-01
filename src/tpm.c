@@ -3,7 +3,7 @@
 
 #include "def.c"
 
-typedef unsigned int    uint;
+typedef unsigned int uint;
 
 typedef struct {
     uint *pixels, width, height;
@@ -39,10 +39,6 @@ uint* TPM_fill_point(uint* pixels, uint width, uint height, uint x, uint y, uint
     return pixels;
 }
 
-
-#include <stdio.h>
-
-// TODO: not to draw canvas if line exceeds cords canvas
 uint* TPM_draw_line(uint *pixels, uint width, uint height, int x1, int y1, int x2, int y2, uint color)
 {
     TPM_sort_vertices(x1, y1, x2, y2);
@@ -94,8 +90,16 @@ uint* TPM_draw_circle(uint *pixels, uint width, uint height, int cx, int cy, uin
     return pixels;
 }
 
-uint* TPM_fill_rect(uint *pixels, uint width, uint height, int x, int y, uint w, uint h, uint color)
+uint* TPM_fill_rect(uint *pixels, uint width, uint height, int x, int y, int w, int h, uint color)
 {
+    if (w == 0 || h == 0) return pixels;
+
+handler:
+    if (x < 0) { w += x; x = 0; }
+    if (y < 0) { h += y; y = 0; }
+    if (w < 0) { w = TPM_M_ABS(w); x -= w; goto handler; }
+    if (h < 0) { h = TPM_M_ABS(h); y -= h; goto handler; }
+
     uint i, j;
     for (i = x; i < (x + w); i++) {
         for (j = y; j < (y + h); j++) {
