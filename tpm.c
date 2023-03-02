@@ -1,7 +1,8 @@
 #ifndef TPM_C_
 #define TPM_C_
 
-#include "deps/m.c"
+#define TPM_M_abs(n) (n < 0 ? -(n) : n)
+#define TPM_M_sqr(n) (n*n)
 
 #define TPM_RGBA(r, g, b, a) \
     ( (((r) & 0xFF) << (8*0) ) | (((g) & 0xFF) << (8*1)) | (( (b) & 0xFF)<<(8*2)) | (((a)&0xFF)<<(8*3)) )
@@ -63,6 +64,11 @@ uint* TPM_fill_point(TPM_Canvas *canvas, uint x, uint y, uint color)
 
 uint* TPM_draw_line(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, uint color)
 {
+    if (x1 < 0) { x1 = 0; }
+    if (x2 > canvas->width) { x2 = canvas->width; }
+    if (y1 < 0) { y1 = 0; }
+    if (y2 > canvas->height) { y2 = canvas->height; }
+
     int dy = y2 - y1, dx = x2 - x1;
 
     if (dx == 0 && dy == 0) {
@@ -77,9 +83,6 @@ uint* TPM_draw_line(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, uint col
         }
 
         if (x1 > canvas->width || x2 < 0) goto end;
-
-        if (x1 < 0) { x1 = 0; }
-        if (x2 > canvas->width) { x2 = canvas->width; }
        
         int x;
         for (x = x1; x <= x2; ++x) {
@@ -95,9 +98,6 @@ uint* TPM_draw_line(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, uint col
         }
 
         if (y1 > canvas->height || y2 < 0) goto end;
-
-        if (y1 < 0) { y1 = 0; }
-        if (y2 > canvas->height) { y2 = canvas->height; }
 
         int y;
         for (y = y1; y <= y2; ++y) {
@@ -170,14 +170,10 @@ end:
     return canvas->pixels;
 }
 
-/*
- * TODO: donot draw the corners if the cordinates is supposed to be out of canvas
- * */
 uint* TPM_draw_rect(TPM_Canvas *canvas, int x, int y, int w, int h, uint color) 
 {
 handler:
     if (w == 0 || h == 0) goto end;
-    int x0 = x, y0 = y, w0 = w, h0 = h;
 
     TPM_fit_rect(canvas->width, canvas->height, &x, &y, &w, &h);
    
@@ -204,9 +200,27 @@ uint* TPM_fill_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int 
     /* 2A = x1(y2 - y3) + x2(y3 - y1) + x3(y1 - y2) */
     TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3);
     
-    /* float m1 = (float)(x2 - x1) / (y2 - y1); */
-    /* float m2 = (float)(x3 - x1) / (y3 - y1); */
-    /* float m3 = (float)(x3 - x2) / (y3 - y2); */
+    float m12 = (float)(y2 - y1) / (x2 - x1);
+    float m31 = (float)(y3 - y1) / (x3 - x1);
+    float m32 = (float)(y3 - y2) / (x3 - x2);
+
+    int x, y;
+
+    /* for (y = y1; y <= y2; ++y) { */
+    /*     int x1 = m12 * (y - y1) + x1; */
+    /*     int x2 = m31 * (y - y1) + x1; */
+    /*     for (x = x1; x <= x2; ++x) { */
+    /*         canvas->pixels[y * canvas->width + x] = color; */
+    /*     } */
+    /* } */
+    /*  */
+    /* for (y = y2; y <= y3; ++y) { */
+    /*     int x1 = m32 * (y - y2) + x2; */
+    /*     int x2 = m31 * (y - y1) + x1; */
+    /*     for (x = x1; x <= x2; ++x) { */
+    /*         canvas->pixels[y * canvas->width + x] = color; */
+    /*     } */
+    /* } */
 
     return canvas->pixels;
 }
@@ -214,14 +228,17 @@ uint* TPM_fill_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int 
 //TODO: implement draw triangle unfilled
 uint* TPM_draw_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint color) 
 {
-    return 0;
     TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3)
+
+    /* TPM_draw_line(canvas, x1, y1, x2, y2, color); */
+    /* TPM_draw_line(canvas, x2, y2, x3, y3, color); */
+    /* TPM_draw_line(canvas, x1, y1, x3, y3, color); */
     
-    float m1 = (float)(x2 - x1) / (y2 - y1);
-    float m2 = (float)(x3 - x1) / (y3 - y1);
-    float m3 = (float)(x3 - x2) / (y3 - y2);
+    /* float m1 = (float)(x2 - x1) / (y2 - y1); */
+    /* float m2 = (float)(x3 - x1) / (y3 - y1); */
+    /* float m3 = (float)(x3 - x2) / (y3 - y2); */
     
-    int x, y;
+    /* int x, y; */
     
     return canvas->pixels;
 }
@@ -232,3 +249,6 @@ uint* TPM_draw_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int 
 #include "deps/fs.c"
 #endif
 
+#ifdef TPM_MATH
+#include "deps/math.c"
+#endif
