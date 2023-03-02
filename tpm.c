@@ -171,7 +171,7 @@ end:
 }
 
 /*
- * TODO: donot draw if the cordinates is supposed to be out of canvas
+ * TODO: donot draw the corners if the cordinates is supposed to be out of canvas
  * */
 uint* TPM_draw_rect(TPM_Canvas *canvas, int x, int y, int w, int h, uint color) 
 {
@@ -201,12 +201,13 @@ end:
 //TODO: only fill triangle if inside canvas | donot fill if got out of canvas
 uint* TPM_fill_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int x3, int y3, uint color)
 {
+    /* 2A = x1(y2 - y3) + x2(y3 - y1) + x3(y1 - y2) */
     TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3);
     
-    float m1 = (float)(x2 - x1) / (y2 - y1);
-    float m2 = (float)(x3 - x1) / (y3 - y1);
-    float m3 = (float)(x3 - x2) / (y3 - y2);
-    
+    /* float m1 = (float)(x2 - x1) / (y2 - y1); */
+    /* float m2 = (float)(x3 - x1) / (y3 - y1); */
+    /* float m3 = (float)(x3 - x2) / (y3 - y2); */
+
     return canvas->pixels;
 }
 
@@ -220,7 +221,7 @@ uint* TPM_draw_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int 
     float m2 = (float)(x3 - x1) / (y3 - y1);
     float m3 = (float)(x3 - x2) / (y3 - y2);
     
-    uint x, y;
+    int x, y;
     
     return canvas->pixels;
 }
