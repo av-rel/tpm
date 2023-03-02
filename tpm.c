@@ -2,7 +2,6 @@
 #define TPM_C_
 
 #include "deps/m.c"
-#include <stdio.h>
 
 #define TPM_RGBA(r, g, b, a) \
     ( (((r) & 0xFF) << (8*0) ) | (((g) & 0xFF) << (8*1)) | (( (b) & 0xFF)<<(8*2)) | (((a)&0xFF)<<(8*3)) )
@@ -48,11 +47,9 @@ TPM_Canvas TPM_init_canvas(uint *pixels, uint width, uint height)
 
 uint* TPM_fill(TPM_Canvas *canvas, uint color)
 {
-    uint x, y;
-    for (y = 0; y < canvas->width ; y++) {
-        for (x = 0; x < canvas->width; x++) {
-            canvas->pixels[y * canvas->width + x] = color;
-        }
+    uint c;
+    for (c = 0; c < canvas->width * canvas->height; c++) {
+        canvas->pixels[c] = color;
     }
 
     return canvas->pixels;
@@ -192,3 +189,4 @@ uint* TPM_draw_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int 
 #ifdef TPM_SAVE_AS
 #include "deps/fs.c"
 #endif
+
