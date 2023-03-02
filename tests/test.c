@@ -1,41 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
-#include "../src/tpm.c"
+#define TPM_SAVE_AS
+#include "../tpm.c"
 
-#include "./line.c"
-#include "./rect.c"
-#include "./tri.c"
-#include "./circle.c"
-
-#define WIDTH 512
-#define HEIGHT 512
-
+#define WIDTH 500
+#define HEIGHT 500
 uint pixels[WIDTH * HEIGHT];
 
+int test_fill_rect(TPM_Canvas* canvas);
+int test_draw_rect(TPM_Canvas* canvas);
+
 int main(int argc, char** argv) {
-    int ret;
-
-    if (argc < 2) {
-        printf("%s%s", "Available tests:\n" , "1. line\n2. rect\n3. tri\n4. circle\n");
-        return 1;
-    };
-
     TPM_Canvas canvas = TPM_init_canvas(pixels, WIDTH, HEIGHT);
 
-    int i, j;
-    for (i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "line") == 0) ret = test_line(&canvas);
-        else if (strcmp(argv[i], "rect") == 0) ret = test_rect(&canvas);
-        else if (strcmp(argv[i], "tri") == 0) ret = test_tri(&canvas);
-        else if (strcmp(argv[i], "circle") == 0) ret = test_circle(&canvas);
-        else {
-            printf("%s `%s` %s", "Test not recognized:", argv[i], "Failed\n");
-            return -1;
-        }
-    }
+    if (!test_fill_rect(&canvas)) return -1;
+    if (!test_draw_rect(&canvas)) return -1;
 
-    return ret;
+    return 0;
 }
 
+int test_draw_rect(TPM_Canvas* canvas) 
+{
+    char *file = "tests/rect_draw.png";
+
+    TPM_fill(canvas, TPM_RGBA(255, 255, 255, 255));
+
+    TPM_draw_rect(canvas, 
+            0, canvas->height,
+            canvas->width/5 , -canvas->height/3,
+            TPM_RGBA(100, 100, 100, 255));
+
+     int rl = TPM_save_as_png(canvas->pixels, canvas->width, canvas->height, file);
+
+    printf("Rectangle (draw): ");
+
+    if (rl) printf("%s\n", "OK");
+    else printf("%s\n", "\tFAILED");
+
+    return rl;
+}
+
+int test_fill_rect(TPM_Canvas* canvas) 
+{
+    char *file = "tests/rect_fill.png";
+
+    TPM_fill(canvas, TPM_RGBA(255, 255, 255, 255));
+
+    TPM_fill_rect(canvas, 
+            0, canvas->height,
+            canvas->width/5, -canvas->height/2,
+            TPM_RGBA(100, 100, 100, 255));
+
+    int rl = TPM_save_as_png(canvas->pixels, canvas->width, canvas->height, file);
+
+    printf("Rectangle (fill): ");
+
+    if (rl) printf("%s\n", "OK");
+    else printf("%s\n", "\tFAILED");
+
+    return rl;
+}
