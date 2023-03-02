@@ -8,11 +8,10 @@
 
 #define TPM_SWAP(T, a, b) { T t = a; a = b; b = t; }
 
-#define TPM_sort_vertices(x1, y1, x2, y2) { if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); } }
 #define TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3) { \
-    TPM_sort_vertices(x1, y1, x2, y2);  \
-    TPM_sort_vertices(x2, y2, x3, y3);  \
-    TPM_sort_vertices(x1, y1, x2, y2);  \
+    if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); }  \
+    if (y2 > y3) { TPM_SWAP(int, x2, x3); TPM_SWAP(int, y2, y3); }  \
+    if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); }  \
 }
 
 void TPM_fit_rect(int width, int height, int *x, int *y, int *w, int *h)
@@ -47,7 +46,7 @@ TPM_Canvas TPM_init_canvas(uint *pixels, uint width, uint height)
 
 uint* TPM_fill(TPM_Canvas *canvas, uint color)
 {
-    uint c;
+    int c;
     for (c = 0; c < canvas->width * canvas->height; c++) {
         canvas->pixels[c] = color;
     }
@@ -64,20 +63,60 @@ uint* TPM_fill_point(TPM_Canvas *canvas, uint x, uint y, uint color)
 
 uint* TPM_draw_line(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, uint color)
 {
-    TPM_sort_vertices(x1, y1, x2, y2);
+    int dy = y2 - y1, dx = x2 - x1;
 
-    uint x;
-    for (x = x1; x <= x2; x++) {
-        uint y = (int)((float)(y2 - y1) / (float)(x2 - x1) * (float)(x - x1) + (float)y1);
-        canvas->pixels[y * canvas->width + x] = color;
+    if (dx == 0 && dy == 0) {
+        canvas->pixels[ y1 * canvas->width + x1] = color;
+        goto end;
     }
 
+    if (TPM_M_abs(dx) > TPM_M_abs(dy)) {
+        if (x1 > x2) {
+            TPM_SWAP(int, x1, x2);
+            TPM_SWAP(int, y1, y2);
+        }
+
+        if (x1 > canvas->width || x2 < 0) goto end;
+
+        if (x1 < 0) { x1 = 0; }
+        if (x2 > canvas->width) { x2 = canvas->width; }
+       
+        int x;
+        for (x = x1; x <= x2; ++x) {
+            int y = dy * (x - x1)/dx + y1;
+            if (y > 0 && y < canvas->height) {
+                canvas->pixels[y * canvas->width + x] = color;
+            }
+        }
+    } else {
+        if (y1 > y2) {
+            TPM_SWAP(int, x1, x2);
+            TPM_SWAP(int, y1, y2);
+        }
+
+        if (y1 > canvas->height || y2 < 0) goto end;
+
+        if (y1 < 0) { y1 = 0; }
+        if (y2 > canvas->height) { y2 = canvas->height; }
+
+        int y;
+        for (y = y1; y <= y2; ++y) {
+            int x = dx * (y - y1)/dy + x1;
+            if (x > 0 && x < canvas->width) {
+                canvas->pixels[y * canvas->width + x] = color;
+            }
+        }
+    }
+
+end:
     return canvas->pixels;
 }
 
-uint* TPM_fill_circle(TPM_Canvas *canvas, int cx, int cy, uint radius, uint color)
+uint* TPM_fill_circle(TPM_Canvas *canvas, int cx, int cy, int radius, uint color)
 {
-    uint x, y;
+    if (radius <= 0) goto end;
+
+    int x, y;
     for (y = 0; y < canvas->height; y++)
         for (x = 0; x < canvas->width; x++) {
             int dx = x - cx;
@@ -87,13 +126,15 @@ uint* TPM_fill_circle(TPM_Canvas *canvas, int cx, int cy, uint radius, uint colo
                 canvas->pixels[y * canvas->width + x] = color;
             }
         }
-
+end:
     return canvas->pixels;
 }
 
-uint* TPM_draw_circle(TPM_Canvas *canvas, int cx, int cy, uint radius, uint color)
+uint* TPM_draw_circle(TPM_Canvas *canvas, int cx, int cy, int radius, uint color)
 {
-    uint x, y;
+    if (radius <= 0) goto end;
+
+    int x, y;
     int r2 = TPM_M_sqr(radius);
     for (y = 0; y < canvas->height; y++) {
         for (x = 0; x < canvas->width; x++) {
@@ -105,7 +146,7 @@ uint* TPM_draw_circle(TPM_Canvas *canvas, int cx, int cy, uint radius, uint colo
             }
         }
     }
-
+end:
     return canvas->pixels;
 }
 
@@ -114,11 +155,11 @@ uint* TPM_fill_rect(TPM_Canvas *canvas, int x, int y, int w, int h, uint color)
     if ( w == 0 || h == 0 ) goto end;
     TPM_fit_rect(canvas->width, canvas->height, &x, &y, &w, &h);
 
-    uint sx = (x + w), sy = (y + h);
+    int sx = (x + w), sy = (y + h);
     if (sx > canvas->width) sx = canvas->width;
     if (sy > canvas->height) sy = canvas->height;
 
-    uint i, j;
+    int i, j;
     for (i = x; i < sx; i++) {
         for (j = y; j < sy; j++) {
             canvas->pixels[j * canvas->width + i] = color;
@@ -140,11 +181,11 @@ handler:
 
     TPM_fit_rect(canvas->width, canvas->height, &x, &y, &w, &h);
    
-    uint sx = (x + w), sy = (y + h);
+    int sx = (x + w), sy = (y + h);
     if (sx > canvas->width) sx = canvas->width;
     if (sy > canvas->height) sy = canvas->height;
 
-    uint i, j;
+    int i, j;
     for (i = x; i < sx; i++) {
         for (j = y; j < sy; j++) {
             if (i == x || (i+1) == sx || j == y || (j + 1) == sy) {
