@@ -14,5 +14,4 @@ int main(int argc, char** argv) {
     canvas.pixels = TPM_fill_circle(&canvas, canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) * 1/10, 0xFF000088);
 
     return TPM_save_as_png(canvas.pixels, canvas.width, canvas.height, file);
-;
 }
