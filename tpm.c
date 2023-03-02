@@ -2,10 +2,12 @@
 #define TPM_C_
 
 #include "deps/m.c"
+#include <stdio.h>
 
-#define TPM_SWAP(T, a, b) { T t = a; a = b; b = t; }
 #define TPM_RGBA(r, g, b, a) \
     ( (((r) & 0xFF) << (8*0) ) | (((g) & 0xFF) << (8*1)) | (( (b) & 0xFF)<<(8*2)) | (((a)&0xFF)<<(8*3)) )
+
+#define TPM_SWAP(T, a, b) { T t = a; a = b; b = t; }
 
 #define TPM_sort_vertices(x1, y1, x2, y2) { if (y1 > y2) { TPM_SWAP(int, x1, x2); TPM_SWAP(int, y1, y2); } }
 #define TPM_sort_triangle_points(x1, y1, x2, y2, x3, y3) { \
@@ -14,10 +16,23 @@
     TPM_sort_vertices(x1, y1, x2, y2);  \
 }
 
+void TPM_fit_rect(int width, int height, int *x, int *y, int *w, int *h)
+{
+handle:
+    if (*x < 0) { *w += *x; *x = 0; }
+    else if (*x > width) { *x = width - *w; }
+    if (*y < 0) { *h += *y; *y = 0; }
+    else if (*y > height) { *y = height - *h; }
+
+    if (*w < 0) { *w = TPM_M_abs(*w); *x -= *w; goto handle; }
+    if (*h < 0) { *h = TPM_M_abs(*h); *y -= *h; goto handle; }
+}
+
 typedef unsigned int uint;
 
 typedef struct {
-    uint *pixels, width, height;
+    uint *pixels;
+    int width, height;
 } TPM_Canvas;
 
 TPM_Canvas TPM_init_canvas(uint *pixels, uint width, uint height) 
@@ -34,7 +49,7 @@ TPM_Canvas TPM_init_canvas(uint *pixels, uint width, uint height)
 uint* TPM_fill(TPM_Canvas *canvas, uint color)
 {
     uint x, y;
-    for (y = 0; y < canvas->width; y++) {
+    for (y = 0; y < canvas->width ; y++) {
         for (x = 0; x < canvas->width; x++) {
             canvas->pixels[y * canvas->width + x] = color;
         }
@@ -99,20 +114,49 @@ uint* TPM_draw_circle(TPM_Canvas *canvas, int cx, int cy, uint radius, uint colo
 
 uint* TPM_fill_rect(TPM_Canvas *canvas, int x, int y, int w, int h, uint color)
 {
+    if ( w == 0 || h == 0 ) goto end;
+    TPM_fit_rect(canvas->width, canvas->height, &x, &y, &w, &h);
+
+    uint sx = (x + w), sy = (y + h);
+    if (sx > canvas->width) sx = canvas->width;
+    if (sy > canvas->height) sy = canvas->height;
+
     uint i, j;
-    for (i = x; i < (x + w); i++) {
-        for (j = y; j < (y + h); j++) {
+    for (i = x; i < sx; i++) {
+        for (j = y; j < sy; j++) {
             canvas->pixels[j * canvas->width + i] = color;
         }
     }
 
+end:
     return canvas->pixels;
 }
 
+/*
+ * TODO: donot draw if the cordinates is supposed to be out of canvas
+ * */
 uint* TPM_draw_rect(TPM_Canvas *canvas, int x, int y, int w, int h, uint color) 
 {
-    if (w == 0 || h == 0) return canvas->pixels;
+handler:
+    if (w == 0 || h == 0) goto end;
+    int x0 = x, y0 = y, w0 = w, h0 = h;
 
+    TPM_fit_rect(canvas->width, canvas->height, &x, &y, &w, &h);
+   
+    uint sx = (x + w), sy = (y + h);
+    if (sx > canvas->width) sx = canvas->width;
+    if (sy > canvas->height) sy = canvas->height;
+
+    uint i, j;
+    for (i = x; i < sx; i++) {
+        for (j = y; j < sy; j++) {
+            if (i == x || (i+1) == sx || j == y || (j + 1) == sy) {
+                canvas->pixels[j * canvas->width + i] = color;
+            }
+        }
+    }
+
+end:
     return canvas->pixels;
 }
 
@@ -143,4 +187,8 @@ uint* TPM_draw_triangle(TPM_Canvas *canvas, int x1, int y1, int x2, int y2, int 
     return canvas->pixels;
 }
 
+#endif
+
+#ifdef TPM_SAVE_AS
+#include "deps/fs.c"
 #endif
