@@ -13,6 +13,10 @@ uint pixels[WIDTH * HEIGHT];
 int test_fill_rect(TPM_Canvas* canvas);
 int test_draw_rect(TPM_Canvas* canvas);
 int test_draw_line(TPM_Canvas* canvas);
+int test_draw_triangle(TPM_Canvas* canvas);
+int test_draw_circle(TPM_Canvas* canvas);
+int test_fill_circle(TPM_Canvas* canvas);
+
 
 int main(int argc, char** argv) {
     TPM_Canvas canvas = TPM_init_canvas(pixels, WIDTH, HEIGHT);
@@ -20,9 +24,33 @@ int main(int argc, char** argv) {
     if (!test_fill_rect(&canvas)) return -1;
     if (!test_draw_rect(&canvas)) return -1;
     if (!test_draw_line(&canvas)) return -1;
+    if (!test_draw_triangle(&canvas)) return -1;
+    if (!test_draw_circle(&canvas)) return -1;
+    if (!test_fill_circle(&canvas)) return -1;
 
     return 0;
 }
+
+int test_draw_triangle(TPM_Canvas* canvas) {
+    char *file = "bin/triangle_draw.png";
+
+    TPM_fill(canvas, TPM_RGBA(255, 255, 255, 255));
+
+    TPM_draw_triangle(canvas,
+            0, 100,
+            canvas->width/4, canvas->height/4,
+            canvas->width/2, canvas->height/2,
+            TPM_RGBA(100, 100, 100, 255));
+
+    int rl = TPM_save_as_png(canvas->pixels, canvas->width, canvas->height, file);
+
+    printf("Triangle (draw): ");
+
+    if (rl) printf("%s\n", "OK");
+    else printf("%s\n", "\tFAILED");
+
+    return rl;
+};
 
 int test_draw_line(TPM_Canvas* canvas) {
     char *file = "bin/line_draw.png";
@@ -43,6 +71,58 @@ int test_draw_line(TPM_Canvas* canvas) {
 
     return rl;
 };
+
+int test_fill_circle(TPM_Canvas* canvas) {
+    char *file = "bin/circle_fill.png";
+
+    TPM_fill(canvas, TPM_RGBA(255, 255, 255, 255));
+
+    int radius = 50;
+    TPM_fill_circle(canvas,
+            0, 0,
+            radius,
+            TPM_RGBA(255, 100, 100, 255));
+
+     int rl = TPM_save_as_png(canvas->pixels, 
+             canvas->width,
+             canvas->height,
+             file);
+
+    printf("Circle (fill): ");
+
+    if (rl) printf("%s\n", "OK");
+    else printf("%s\n", "\tFAILED");
+
+    return rl;
+
+}
+
+
+
+int test_draw_circle(TPM_Canvas* canvas) {
+    char *file = "bin/circle_draw.png";
+
+    TPM_fill(canvas, TPM_RGBA(255, 255, 255, 255));
+
+    int radius = 50;
+    TPM_draw_circle(canvas,
+            0, 0,
+            radius,
+            TPM_RGBA(255, 100, 100, 255));
+
+     int rl = TPM_save_as_png(canvas->pixels, 
+             canvas->width,
+             canvas->height,
+             file);
+
+    printf("Circle (draw): ");
+
+    if (rl) printf("%s\n", "OK");
+    else printf("%s\n", "\tFAILED");
+
+    return rl;
+
+}
 
 int test_draw_rect(TPM_Canvas* canvas) 
 {
@@ -85,3 +165,4 @@ int test_fill_rect(TPM_Canvas* canvas)
 
     return rl;
 }
+
