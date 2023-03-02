@@ -3,7 +3,7 @@
 set COM=gcc
 set MAIN=tests\test.c
 set BIN=bin\test.exe
-set CFLAGS=-Wall -Wextra
+set CFLAGS=-g -Wall -Wextra
 set FLAGS=
 
 if not exist bin mkdir bin
