@@ -2,9 +2,7 @@
 
 ## Description
 
-TPM is a pixel editor and can save as image format or also be used for rendering images in Canvas like SDL or HTML Canvas (using wasm)
-
-## NOTE: Under Development
+TPM is a graphics lib and can save as image format or also be used for rendering images in Canvas like SDL or HTML Canvas (using wasm)
 
 ## Perks
 * Pure C
