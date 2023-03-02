@@ -5,6 +5,7 @@
 
 #define TPM_M_abs(n) (n < 0 ? -(n) : n)
 #define TPM_M_sqr(n) (n*n)
+#define TPM_M_mid(a, b) ((a + b) / 2)
 #define TPM_M_max(a, b) (a > b ? a : b)
 #define TPM_M_min(a, b) (a < b ? a : b)
 
